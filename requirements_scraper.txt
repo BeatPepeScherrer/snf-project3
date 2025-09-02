@@ -1,0 +1,6 @@
+selenium>=4.6  # 4.6+ includes Selenium Manager (auto ChromeDriver)
+beautifulsoup4>=4.12
+lxml>=4.9
+pdfminer.six
+pypdf
+requests
