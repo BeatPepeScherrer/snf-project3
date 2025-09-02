@@ -14,17 +14,17 @@ from langchain.output_parsers import JsonOutputParser
 
 parser = argparse.ArgumentParser(description="Run Langflow API on a set of PDF files and output results to a CSV.")
 parser.add_argument("--input_file", type=str, help="Relative path from the current working directory to the directory containing PDFs", default="data/20250901_1420_bhrrc_scraper_output.json")
-parser.add_argument("--json_path", type=str, help="Relative path from the current working directory to the directory containing PDFs", default="data")
+parser.add_argument("--json_path", type=str, help="Relative path from the current working directory to the directory containing jsons", default="data")
+parser.add_argument("--output_path", type=str, help="Relative path from the current working directory to the directory containing result files", default="results")
 args = parser.parse_args()
 
 current_working_directory = Path.cwd()
-relative_path = Path(args.json_path)
-json_directory = current_working_directory / relative_path
+relative_json_path = Path(args.json_path)
+relative_output_path = Path(args.output_path)
+json_directory = current_working_directory / relative_json_path
+output_directory = current_working_directory / relative_output_path
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-OUT_DIR   = Path("outputs")
-OUT_DIR.mkdir(exist_ok=True, parents=True)
 
 def parse_date(s: str) -> Optional[str]:
     for fmt in ("%d.%m.%Y","%Y-%m-%d","%d/%m/%Y","%m/%d/%Y"):
@@ -203,7 +203,7 @@ def aggregate(extractions_file: str):
             ex = first_example_with(label, field)
             if ex: agg["examples"].append({"field": field, **ex})
 
-    with open(OUT_DIR / "summary.json", "w", encoding="utf-8") as f:
+    with open(output_directory / "summary.json", "w", encoding="utf-8") as f:
         json.dump(agg, f, ensure_ascii=False, indent=2)
 
     return rows, agg
@@ -233,7 +233,7 @@ def write_report(agg: Dict[str,Any], questions: List[str]):
     lines.append("\n### Illustrative examples\n")
     for ex in agg["examples"]:
         lines.append(f"- **{ex['field']} – {ex['label']}** → row {ex['row_id']} ({ex.get('company','')}): “{ex.get('quote','')[:220]}”")
-    (OUT_DIR / "final_report.md").write_text("\n".join(lines), encoding="utf-8")
+    (output_directory / "final_report.md").write_text("\n".join(lines), encoding="utf-8")
 
 if __name__ == "__main__":
     docs = load_rows(json_directory)
