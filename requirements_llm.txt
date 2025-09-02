@@ -2,3 +2,8 @@ langchain
 openai
 pypdf
 langflow
+openai
+langchain
+chromadb
+tiktoken
+pydantic
