@@ -1,8 +1,8 @@
-# pip install openai langchain chromadb tiktoken pydantic pandas
-import os, json, re, datetime, hashlib, collections, argparse
+import os, json, re, hashlib, collections, argparse
 from pathlib import Path
 from typing import List, Optional, Dict, Any
-
+from datetime import datetime
+from dotenv import load_dotenv, find_dotenv
 from pydantic import BaseModel, Field
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
@@ -10,10 +10,11 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
-from langchain.output_parsers import JsonOutputParser
+from langchain_core.output_parsers import JsonOutputParser
+
 
 parser = argparse.ArgumentParser(description="Run Langflow API on a set of PDF files and output results to a CSV.")
-parser.add_argument("--input_file", type=str, help="Relative path from the current working directory to the directory containing PDFs", default="data/20250901_1420_bhrrc_scraper_output.json")
+parser.add_argument("--input_file", type=str, help="Relative path from the current working directory to the directory containing PDFs", default="data/test.json")
 parser.add_argument("--json_path", type=str, help="Relative path from the current working directory to the directory containing jsons", default="data")
 parser.add_argument("--output_path", type=str, help="Relative path from the current working directory to the directory containing result files", default="results")
 args = parser.parse_args()
@@ -21,10 +22,13 @@ args = parser.parse_args()
 current_working_directory = Path.cwd()
 relative_json_path = Path(args.json_path)
 relative_output_path = Path(args.output_path)
+relative_json_file = Path(args.input_file)
 json_directory = current_working_directory / relative_json_path
 output_directory = current_working_directory / relative_output_path
+json_file = current_working_directory / relative_json_file
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+load_dotenv(find_dotenv())
 
 def parse_date(s: str) -> Optional[str]:
     for fmt in ("%d.%m.%Y","%Y-%m-%d","%d/%m/%Y","%m/%d/%Y"):
@@ -35,7 +39,7 @@ def parse_date(s: str) -> Optional[str]:
     return None
 
 def load_rows(path: str) -> List[Dict[str, Any]]:
-    p = Path(path)
+    p = path
     rows = []
     with p.open("r", encoding="utf-8") as f:
         try:
@@ -59,6 +63,7 @@ def load_rows(path: str) -> List[Dict[str, Any]]:
         out.append({
             "row_id": idx,
             "company": r.get("Companies") or "",
+            "sector": r.get("Company Sectors") or "",
             "title": r.get("Title") or "",
             "url": r.get("URL") or "",
             "backdate": parse_date(r.get("Backdate") or "") if r.get("Backdate") else None,
@@ -83,12 +88,12 @@ def build_vectorstore(docs: List[Dict[str,Any]], persist_dir="outputs/chroma"):
     return vs
 
 # ---------- LLM setup ----------
-MODEL_NAME = os.getenv("LLM_MODEL", "gpt-4o-mini")
-llm = ChatOpenAI(model=MODEL_NAME, temperature=0)
+llm = ChatOpenAI(model=os.getenv("MODEL_NAME"), temperature=0, api_key=os.getenv("OPENAI_API_KEY"))
 
 class Extraction(BaseModel):
     row_id: int
     company: str
+    sector: str
     backdate: Optional[str]
     evidence: List[Dict[str,str]] = Field(default_factory=list)
     relational_contracts: List[Dict[str,str]] = Field(default_factory=list)
@@ -110,6 +115,7 @@ Return JSON only, matching this schema:
 Metadata:
 ROW_ID: {row_id}
 COMPANY: {company}
+SECTOR: {sector}
 TITLE: {title}
 URL: {url}
 BACKDATE: {backdate}
@@ -134,6 +140,7 @@ def run_extraction(docs: List[Dict[str,Any]]):
                 "schema": parser.get_format_instructions(),
                 "row_id": d["row_id"],
                 "company": d["company"],
+                "sector": d["sector"],
                 "title": d["title"],
                 "url": d["url"],
                 "backdate": d["backdate"],
@@ -236,7 +243,7 @@ def write_report(agg: Dict[str,Any], questions: List[str]):
     (output_directory / "final_report.md").write_text("\n".join(lines), encoding="utf-8")
 
 if __name__ == "__main__":
-    docs = load_rows(json_directory)
+    docs = load_rows(path = json_file)
     # Optional: build a vector store for interactive querying
     # vs = build_vectorstore(docs)
 

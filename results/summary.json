@@ -1,0 +1,31 @@
+{
+  "n_docs": 5,
+  "relational_contracts": {},
+  "uncertainty_types": {},
+  "mitigation_strategies": {
+    "sibcl will not draw any water from the river or ground water on its premises or ground water from any adjacent villages": 1,
+    "the sibcl bottling unit will have a state-of-the-art effluent treatment plant": 1,
+    "initiatives are underway such as undertaking green belt projects, afforestation drives, and providing drinking water to the local community": 1
+  },
+  "communication_negotiation": {
+    "the issue presented in this article has been amicably resolved": 1,
+    "the photographer has removed the bill board containing the coca-cola brand logo": 1,
+    "the company has reciprocated by withdrawing its legal notice to him": 1,
+    "detailed conversations about the issues with those who are concerned about the situation of the millions of people living there": 1
+  },
+  "misunderstanding_handling": {},
+  "assurances": {
+    "the security staff employed by the corrib gas partners have been fully briefed on the ethical and behavioural standards they are expected to meet when engaging with community members in the course of their work.": 1
+  },
+  "non_compliance_issues": {},
+  "sanctions": {},
+  "examples": [
+    {
+      "field": "assurances",
+      "row_id": 0,
+      "company": "Shell plc",
+      "label": "the security staff employed by the corrib gas partners have been fully briefed on the ethical and behavioural standards they are expected to meet when engaging with community members in the course of their work.",
+      "quote": ""
+    }
+  ]
+}
