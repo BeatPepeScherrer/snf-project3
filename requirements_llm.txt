@@ -4,6 +4,8 @@ pypdf
 langflow
 openai
 langchain
+langchain-core
 chromadb
 tiktoken
 pydantic
+dotenv
