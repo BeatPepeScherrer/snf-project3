@@ -13,8 +13,8 @@ from langchain.chains import LLMChain
 from langchain_core.output_parsers import JsonOutputParser
 
 
-parser = argparse.ArgumentParser(description="Run Langflow API on a set of PDF files and output results to a CSV.")
-parser.add_argument("--input_file", type=str, help="Relative path from the current working directory to the directory containing PDFs", default="data/test.json")
+parser = argparse.ArgumentParser(description="Run LLM-based analysis on BHRRC json files")
+parser.add_argument("--input_file", type=str, help="Relative path from the current working directory to the directory containing json files", default="data/test.json")
 parser.add_argument("--json_path", type=str, help="Relative path from the current working directory to the directory containing jsons", default="data")
 parser.add_argument("--output_path", type=str, help="Relative path from the current working directory to the directory containing result files", default="results")
 args = parser.parse_args()
