@@ -3,7 +3,7 @@
 #   python bhrrc_chrome_bs.py --url https://www.business-humanrights.org/en/latest-news/shell-response-re-corrib-gas-protest/ --csv bhrrc_texts.csv
 #   add --headless for headless mode
 
-import os, csv, re, argparse, time, json
+import os, csv, re, argparse, time, json, sys
 from datetime import datetime
 from urllib.parse import urljoin
 from playwright.sync_api import sync_playwright
@@ -14,6 +14,9 @@ from io import BytesIO
 from urllib.parse import urljoin
 import requests
 from pdfminer.high_level import extract_text as pdf_extract_text
+from io import BytesIO
+from pdf2image import convert_from_bytes
+import pytesseract
 
 SESSION = requests.Session()
 SESSION.headers.update({"User-Agent": "Mozilla/5.0 (BHRRC scraper)"})
@@ -23,6 +26,15 @@ STOP_STORY = re.compile(r"(Company Responses|Timeline|Latest news)", re.I)
 
 timestamp = datetime.now().strftime("%Y%m%d_%H%M")
 output_json = f"data/{timestamp}_bhrrc_scraper_output.json"
+
+# pytesseract / tessdata config
+cand = [
+    os.path.join(sys.prefix, "Library", "share", "tessdata"),  # Win + conda-forge
+    os.path.join(sys.prefix, "share", "tessdata"),              # *nix + conda-forge
+    r"C:\Program Files\Tesseract-OCR\tessdata",                 # Win official installer
+]
+tessdata = next((p for p in cand if os.path.exists(os.path.join(p, "eng.traineddata"))), None)
+os.environ["TESSDATA_PREFIX"] = tessdata  # set to the folder containing *.traineddata
 
 def find_first_pdf_url(response_page_html, base_url):
     """
@@ -44,37 +56,39 @@ def find_first_pdf_url(response_page_html, base_url):
 
     return None
 
+def find_first_pdf_url(html, base):
+    s = BeautifulSoup(html, "lxml"); j = lambda u: urljoin(base, u)
+    for h in (t.get("href","").strip() for t in s.select("a[href],link[href]")):
+        if ".pdf" in h.lower(): return j(h)
+    try: d = json.loads(s.find("script", id="pageAsDataJSON", type="application/json").string or "{}")
+    except: d = {}
+    for k in ("source","downloadUrl","download_url","pdf","url","file"):
+        v = d.get(k,"")
+        if ".pdf" in v.lower(): return j(v)
+    m = re.search(r'"(?:source|url|downloadUrl|download_url|pdf)"\s*:\s*"([^"]+?\.pdf[^"]*)"', html, re.I)
+    return j(m.group(1)) if m else None
+
 def download_pdf_text(pdf_url, timeout=60):
-    """
-    Download and extract text from PDF.
-    - Try pdfminer.six (best quality)
-    - Fallback to pypdf if needed
-    """
-    r = SESSION.get(pdf_url, timeout=timeout)
-    r.raise_for_status()
+    r = SESSION.get(pdf_url, timeout=timeout); r.raise_for_status()
     buf = BytesIO(r.content)
 
-    # Try pdfminer first
+    # Try pdfminer
     try:
-        txt = pdf_extract_text(buf) or ""
-        if txt.strip():
-            return txt.strip()
-    except Exception:
-        pass
+        t = (pdf_extract_text(buf) or "").strip()
+        if t: return t
+    except Exception: pass
 
     # Fallback: pypdf
     try:
         from pypdf import PdfReader
-        buf.seek(0)
-        reader = PdfReader(buf)
-        pieces = []
-        for page in reader.pages:
-            t = page.extract_text() or ""
-            if t:
-                pieces.append(t)
-        return "\n".join(pieces).strip()
-    except Exception:
-        return ""
+        buf.seek(0); t = "\n".join((p.extract_text() or "") for p in PdfReader(buf).pages).strip()
+        if t: return t
+    except Exception: pass
+
+    # OCR fallback
+    buf.seek(0)
+    pages = convert_from_bytes(buf.getvalue())
+    return "\n\n".join(pytesseract.image_to_string(p) for p in pages).strip()
     
 def init_browser(headless=True):
     opts = Options()
@@ -163,28 +177,12 @@ def extract_response_text_preferring_pdf(response_page_url, response_page_html):
         node = node.next_sibling
     return "\n\n".join(out).strip()
 
-def extract_story_text(html):
+def extract_story_text(html: str) -> str:
     soup = BeautifulSoup(html, "lxml")
-    blocks = soup.select("div.block.html-block")
-    texts = [b.get_text("\n", strip=True) for b in blocks if b.get_text(strip=True)]
-    if texts:
-        return "\n\n".join(texts).strip()
-        # Then paragraphs after H1 until common markers
-    STOP = re.compile(r"(This is a response to|Timeline|Latest news|Company Responses)", re.I)
-    h1 = soup.find("h1")
-    if not h1:
-        return "\n\n".join(p.get_text(" ", strip=True) for p in soup.select("p"))
-    out, node = [], h1.find_next_sibling()
-    while node:
-        if isinstance(node, NavigableString):
-            node = node.next_sibling; continue
-        txt = node.get_text(" ", strip=True)
-        if txt and STOP.search(txt): break
-        for t in node.find_all(["p","li","blockquote"], recursive=True):
-            s = t.get_text(" ", strip=True)
-            if s: out.append(s)
-        node = node.next_sibling
-    return "\n\n".join(out).strip()
+    title_tag = soup.find("title")
+    if title_tag:
+        return title_tag.get_text(strip=True)
+    return ""
     
 
 def append_jsonl(out_path, obj):
@@ -200,15 +198,14 @@ def enrich_row_from_url(row, url_col="URL", headless=False):
     
     driver = init_browser(headless=True)
 
-
-    # Reuse your existing scraping helpers:
+    # Reuse existing scraping helpers:
     resp_html = get_html_with_chrome(driver, url)
     response_text = extract_response_text_preferring_pdf(url, resp_html)
     story_url = find_parent_story_url_from_html(url, resp_html)
 
     story_text = ""
     if story_url:
-        story_html = get_html_with_chrome(driver, url)
+        story_html = get_html_with_chrome(driver, story_url)
         story_text = extract_story_text(story_html)
 
     enriched = dict(row)  # keep ALL original CSV fields
@@ -233,12 +230,13 @@ if __name__ == "__main__":
         except csv.Error:
             reader = csv.DictReader(f)
 
+
         for row in reader:
             try:
                 obj = enrich_row_from_url(row, url_col=args.url_col, headless=args.headless)
                 if obj:
                     append_jsonl(output_json, obj)
                     print(f"[ok] {row.get(args.url_col)}")
-                time.sleep(0.4)  # polite pause
+                time.sleep(0.2)  # polite pause
             except Exception as e:
                 print(f"[error] {row.get(args.url_col)} -> {e}")
