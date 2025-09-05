@@ -227,6 +227,8 @@ if __name__ == "__main__":
         try:
             dialect = csv.Sniffer().sniff(sample, delimiters=",;\t|")
             reader = csv.DictReader(f, dialect=dialect)
+           # rows = list(reader)
+           # row = rows[6] 
         except csv.Error:
             reader = csv.DictReader(f)
 
