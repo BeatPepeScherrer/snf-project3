@@ -11,3 +11,4 @@ pydantic
 dotenv
 pdf2image
 pytesseract
+matplotlib
