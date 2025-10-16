@@ -105,6 +105,74 @@ else:
 # Filter empty texts
 df = df[df["text"].str.len() > 0].reset_index(drop=True)
 
+# Clean and unify the company names and sectors columns
+company_names = [
+    "Adidas",
+    "H&M",
+    "Hermes",
+    "Inditex",
+    "LVMH",
+    "Nike",
+    "ExxonMobil",
+    "PetroChina",
+    "Saudi Aramco",
+    "Shell",
+    "TotalEnergies",
+    "Anheuser-Busch InBev",
+    "Archer Daniels Midland (ADM)",
+    "Coca-Cola",
+    "Nestle",
+    "PepsiCo",
+    "BHP Group",
+    "Glencore",
+    "Rio Tinto",
+    "Vale",
+    "Zijin Mining Group",
+    "Mercedes Benz",
+    "Stellantis",
+    "Toyota",
+    "Volkswagen Group",
+    "DHL Group",
+    "FedEx",
+    "UPS"
+]
+
+COMPANY_COL = "Companies"
+
+def _norm(s: str) -> str:
+    s = unicodedata.normalize("NFKD", str(s)).encode("ascii", "ignore").decode("ascii")
+    return s.casefold()
+
+# Precompute normalized forms
+canon_norm = [(c, _norm(c)) for c in company_names]
+
+def unify_company(cell):
+    if not isinstance(cell, str):
+        return cell
+    s_norm = _norm(cell)
+    best = None  # (start_index, canonical_name)
+    for canon, c_norm in canon_norm:
+        idx = s_norm.find(c_norm)
+        if idx != -1 and (best is None or idx < best[0]):
+            best = (idx, canon)
+    return best[1] if best else cell
+
+df[COMPANY_COL] = df[COMPANY_COL].map(unify_company)
+
+# clean the sectors column
+groups = {
+ "Clothing & Textile": ["Adidas","H&M","Hermes","Inditex","LVMH","Nike"],
+ "Oil & Gas": ["ExxonMobil","PetroChina","Saudi Aramco","Shell","TotalEnergies"],
+ "Food & Beverage": ["Anheuser-Busch InBev","Archer Daniels Midland (ADM)","Coca-Cola","Nestle","PepsiCo"],
+ "Mining": ["BHP Group","Glencore","Rio Tinto","Vale","Zijin Mining Group"],
+ "Automotive": ["Mercedes Benz","Stellantis","Toyota","Volkswagen Group"],
+ "Transportation": ["DHL Group","FedEx","UPS"],
+}
+sector_map = {c:s for s, cs in groups.items() for c in cs}
+df["Company Sectors"] = df["Companies"].map(sector_map) 
+
+
+
 # Check if data cleaning worked
 print("After cleaning, rows:", len(df))
 df[["doc_id", "Companies", "Company Sectors", "Countries", "text", "date"]].head(3)
