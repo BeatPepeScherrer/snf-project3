@@ -1,0 +1,327 @@
+{
+  "0": {
+    "cluster_id": 0,
+    "label": "Denial and Counter Evidence",
+    "rationale": "Statements consistently reject external allegations as factually or legally incorrect, point to internal investigations and contradictory evidence, attribute issues to third parties or media/unions, and reaffirm the company's commitments while distinguishing contractual responsibilities.",
+    "rq": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "1": {
+    "cluster_id": "Cluster 1",
+    "label": "Assurances, Standards, Grievances",
+    "rationale": "The sentences collectively frame corporate responses as assurances of compliance—invoking standards and voluntary principles, presenting remediation as opportunity, and describing grievance mechanisms and mitigation acts as demonstrations of good faith to manage stakeholders and expectations.",
+    "rq": [
+      1,
+      3,
+      4,
+      5
+    ]
+  },
+  "2": {
+    "cluster_id": "Cluster 2",
+    "label": "Compliance and Contractual Accountability",
+    "rationale": "The statements collectively emphasize prompt compliance, up-to-date documentation and reporting, external audits/closure verification, adherence to certification standards (SA8000), leadership/implementation programs, and the contractual allocation of operational responsibility—framing these as assurances of lawful and safe conduct.",
+    "rq": [
+      1,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "3": {
+    "cluster_id": "Cluster 3",
+    "label": "Immediate remediation & engagement",
+    "rationale": "The statements portray prompt, proactive responses to incidents—immediate safety and remediation actions, rapid engagement with suppliers and affected communities (including voluntary, publicised processes), and cooperation with authorities to resolve or mitigate legal/security issues.",
+    "rq": [
+      1,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "4": {
+    "cluster_id": "Cluster 4",
+    "label": "Remediation and Responsibility Limits",
+    "rationale": "Statements combine claims of remediation and assurance (investigations, recommended stoppages, sharing findings, denial of child labour) with efforts to limit or shift responsibility (divestment, joint-venture/day-to-day management, past shareholder status) and note verification constraints from COVID and unrest.",
+    "rq": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "5": {
+    "cluster_id": "Cluster 5",
+    "label": "Contextualize & Minimize Criticism",
+    "rationale": "Statements frame contested actions as appropriately targeted and small in scope, arguing critics overlook the broader context and proportionality of the company's programs.",
+    "rq": [
+      4,
+      5
+    ]
+  },
+  "6": {
+    "cluster_id": "Cluster 6",
+    "label": "Responsibility and transparency",
+    "rationale": "Companies frame their responses as proactive commitments to responsible behavior—operational mitigation, community support, non‑discrimination policies, public climate positions, and formal reporting—to meet stakeholder expectations and align with regulatory or policy frameworks.",
+    "rq": [
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "7": {
+    "cluster_id": "Cluster 7",
+    "label": "Ongoing community communication",
+    "rationale": "Sentences collectively emphasize continuous information sharing, open lines of contact, and guaranteed access for local communities as commitments to keep stakeholders informed and engaged.",
+    "rq": [
+      1,
+      4,
+      5
+    ]
+  },
+  "8": {
+    "cluster_id": "Cluster 8",
+    "label": "Denial and liability limits",
+    "rationale": "Sentences consistently deny alleged misconduct or relationships, assert legal/operational boundaries, and provide compliance claims to limit company responsibility and rebut accusations.",
+    "rq": [
+      4,
+      5,
+      6
+    ]
+  },
+  "9": {
+    "cluster_id": 9,
+    "label": "Compliance and cost‑shifting",
+    "rationale": "Statements emphasize deference to government authority and regulatory decisions, describe contractual commitments (e.g., long‑term carbon purchases), and explain how compliance costs are allocated between the company and suppliers.",
+    "rq": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "10": {
+    "cluster_id": 10,
+    "label": "Mitigation and No-Impact Claims",
+    "rationale": "Statements emphasize post-incident monitoring, third‑party studies, and methodological safeguards to demonstrate minimal or no environmental harm, attribute anomalies to natural background or regulatory gaps, and to contest allegations or compensation claims.",
+    "rq": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "11": {
+    "cluster_id": 11,
+    "label": "Flaring reduction targets and investments",
+    "rationale": "The statements present a narrative of commitment to cut gas flaring via quantified interim and long-term targets, reported historical reductions, substantial capital investments and changed practices (no new continuous-flare developments), while acknowledging technology and policy dependencies.",
+    "rq": [
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "12": {
+    "cluster_id": 12,
+    "label": "Community engagement & grievances",
+    "rationale": "Statements emphasize extensive stakeholder engagement (in-person and virtual meetings/public hearings), formal channels for collecting complaints, and reported resolution rates and meetings to review claims, indicating processes for communicating with and addressing community concerns.",
+    "rq": [
+      3,
+      4,
+      5
+    ]
+  },
+  "13": {
+    "cluster_id": "Cluster 13",
+    "label": "Community investment and job creation",
+    "rationale": "The statements collectively emphasize the company's socio-economic mitigation narrative—financial contributions, community investments, job creation/offers, above-average wages, and cooperative agreements with governments and partners—to address impacts and secure local benefits.",
+    "rq": [
+      1,
+      4,
+      5
+    ]
+  },
+  "14": {
+    "cluster_id": "Cluster 14",
+    "label": "Assurances and remediation",
+    "rationale": "Statements center on corporate responses to alleged harms—promises of aid, safety improvements and non-repetition, sustainability commitments, citations of assessments or legal outcomes to assert compliance or limit liability—while stakeholder groups demand transparency and consultation.",
+    "rq": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "15": {
+    "cluster_id": "Cluster 15",
+    "label": "Timeline and status updates",
+    "rationale": "The sentences are chronological status reports (committed shipments, detection of findings, and scheduled test completion) used to communicate timelines, manage unfolding uncertainty, and reassure stakeholders about actions taken.",
+    "rq": [
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "16": {
+    "cluster_id": 16,
+    "label": "Regulatory recall compliance",
+    "rationale": "The company withdrew a product from sale to comply with a regulatory recall order, indicating response to regulatory/legal uncertainty and managerial action to avoid sanctions and reputational harm.",
+    "rq": [
+      2,
+      3,
+      6
+    ]
+  },
+  "17": {
+    "cluster_id": "Cluster 17",
+    "label": "Community health outreach",
+    "rationale": "Sentences describe company measures—WHO-aligned mass testing, multilingual communication materials, adapted engagement methods, and provision of treatment—to reduce epidemiic uncertainty, maintain dialogue with local communities, and provide transparent assurances of care during public-health crises.",
+    "rq": [
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "18": {
+    "cluster_id": 18,
+    "label": "Military enforcement, fisherfolk unprepared",
+    "rationale": "Sentences describe UPDF-led enforcement of fisheries rules that fisherfolk were largely unaware of or unprepared for, followed by consultations and awareness efforts, official/legal assurances about the enforcement's basis, and a company distancing its operations from the enforcement while noting no recorded grievances.",
+    "rq": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "19": {
+    "cluster_id": 19,
+    "label": "Transparency: published impact assessment",
+    "rationale": "The company emphasizes transparency and compliance by citing a complete impact assessment for the Northern Lights CCS project that was published on the Norwegian government's website, framing this disclosure as assurance to stakeholders.",
+    "rq": [
+      4,
+      5
+    ]
+  },
+  "20": {
+    "cluster_id": "Cluster 20",
+    "label": "Claims of compliance and engagement",
+    "rationale": "Statements consistently assert the company follows good international practice by engaging affected people consensually, honoring payments and obligations, reporting no complaints or red flags, and inviting dialogue as evidence of compliance.",
+    "rq": [
+      1,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "21": {
+    "cluster_id": "Cluster 21",
+    "label": "Independent remedies and prevention",
+    "rationale": "Statements stress guaranteeing independent remedial mechanisms and deploying audits, preventive actions, and sourcing improvements to detect, correct, and avoid future issues when specific expectations are lacking.",
+    "rq": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "22": {
+    "cluster_id": 22,
+    "label": "Regulatory and complexity delays",
+    "rationale": "Statements consistently present postponements and slow progress as consequences of regulatory/permit uncertainty and operational complexity, stressing the need for time, continued dialogue, and awaiting external decisions before proceeding.",
+    "rq": [
+      2,
+      3,
+      4
+    ]
+  },
+  "23": {
+    "cluster_id": 23,
+    "label": "Generator-only; PLN monopoly",
+    "rationale": "The company emphasizes it only generates electricity for its own operational needs under an operation license and that public distribution and supply to communities is the statutory responsibility and monopoly of the state-owned utility (PLN), so it cannot directly supply third parties.",
+    "rq": [
+      4,
+      5
+    ]
+  },
+  "24": {
+    "cluster_id": "Cluster 24",
+    "label": "Authorization and secure deliveries",
+    "rationale": "The sentences emphasize procedural controls and privacy measures—requiring authorization for orders and providing secure, unmonitored mailboxes for personal deliveries—framing organizational assurances and enforced access rules.",
+    "rq": [
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "25": {
+    "cluster_id": 25,
+    "label": "Removal of problematic items",
+    "rationale": "Statements report that the identified items or conditions have been removed, presenting a corrective action in response to the allegation.",
+    "rq": [
+      5,
+      6
+    ]
+  },
+  "26": {
+    "cluster_id": "Cluster 26",
+    "label": "Individualized resettlement progress",
+    "rationale": "Describes Fundação Renova’s provision of housing and support through rented/acquired properties, family-led house design with architect assistance, staged construction updates, and program enrollment — framing progress reporting and participatory design as ways to manage uncertainty and reassure affected families.",
+    "rq": [
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "27": {
+    "cluster_id": "Cluster 27",
+    "label": "COVID travel disruption; supplier accountability",
+    "rationale": "Sentences link COVID-19-related travel restrictions and resulting financial pressures to operational problems (e.g., layoffs, inability of Chinese supervisors to enter Vietnam) and show the buyer seeking explanations from the supplier (Pou Chen), indicating disruption-driven uncertainty and requests for accountability.",
+    "rq": [
+      2,
+      3,
+      4
+    ]
+  },
+  "28": {
+    "cluster_id": 28,
+    "label": "Land rights assurance",
+    "rationale": "The statements emphasize that Maasai villages will retain legal ownership of land and continue traditional grazing practices, framing the company's position as upholding community land rights under Tanzanian law.",
+    "rq": [
+      4,
+      5
+    ]
+  },
+  "29": {
+    "cluster_id": 29,
+    "label": "Legal proceedings and pending determinations",
+    "rationale": "Sentences consistently describe disputes handled through formal legal/administrative processes—appeals, court clarifications, separate damages-assessment procedures, petitions and communications—so outcomes (liability, compensation, sanctions) remain unresolved or contingent on final legally binding decisions.",
+    "rq": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  }
+}
