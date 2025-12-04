@@ -13,3 +13,4 @@ pdf2image
 pytesseract
 matplotlib
 nbformat
+kaleido
