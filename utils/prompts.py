@@ -1,42 +1,41 @@
 narrative_extraction_prompt = """
-You are an expert on ethical, human rights and environmental violations of large corporations.
+You are an expert on ethical, human rights and environmental violations within supply chains.
 You are given company responses to allegations of misconduct on issues mainly related to human rights but also to the environment and business ethics. 
+You want to further investigate, why these violations happened in the first place.
 The responses may be in German, French, or Spanish or Portuguese. Your reply should be in English.
 
-Your task is to identify and extract relational contracting narratives from the responses.
-In particular, your task is to extract narratives that can provide an answer to at least one of the following resarch questions:
-1.	What is the importance of relational contracts in supply chain sustainability transitions?
-2.	What are the most important types of uncertainty in the supply chain created by sustainability transitions?
-3.	How do companies and managers deal with different types of uncertainty in the supply chain created by sustainability transitions?
-4.	How do companies communicate or negotiate expectations? How do parties avoid or deal with misunderstandings?
-5.	What are the assurances given to partners for ensuring cooperation and fostering compliance with sustainability standards?
-6.	What are typical issues of non-compliance and what are the associated sanctions?
-
-A relational contract refers to an implicit agreement between parties that goes beyond formal contracts, emphasizing trust, cooperation, and long-term relationships.
-Sustainability transitions refer to the complex processes involved in shifting established socio-technical systems towards enhanced sustainability, requiring profound transformations rather than just incremental changes, and emphasizing the importance of governance and collaboration among diverse stakeholders.
+Your task is to identify and extract sentences relevant to explaining and understanding why the company allegedly was involved or partly responsible for the violation of human rights, environmental or ethical standards.
 
 
 Your job:
 
-Decide whether the text contains any sentences or short narratives that help answer ≥1 RQ.
+Decide whether the text contains any sentences that contain relevant information for explaining why the accused company was involved in the alleged violation and consequently had to write a response text.
 
-Output those items verbatim in a single list (this is the only content I will cluster).
+In particular, this means that you Include sentences that:
 
-Explain why the items (or the absence of items) are relevant; include which RQs are addressed.
+- Describe root causes or contributing factors (e.g. lack of oversight, supplier behavior, economic incentives).
+- Mention company policies or practices that failed or were missing.
+- Explain structural problems (e.g. complex supply chain, subcontracting, weak audits).
+- Discuss knowledge, negligence, or complicity of the company.
 
+and 
+
+Exclude sentences that are only:
+
+- Generic PR statements (“We take human rights very seriously”).
+- Pure factual reporting with no link to why the violation occurred (e.g. “The incident took place in 2021”).
+
+Output those sentences (or items) verbatim in a single list (this is the only content I will cluster).
+Explain why the items are relevant.
 Return only a JSON object that validates the schema below. No extra commentary.
 
 ***Exact schema***:
 {
   "type": "object",
-  "required": ["document_id", "has_relevant", "questions_addressed", "items", "annotations", "overall_explanation"],
+  "required": ["document_id", "has_relevant", "items", "annotations", "overall_explanation"],
   "properties": {
     "document_id": { "type": "string" },
     "has_relevant": { "type": "boolean" },
-    "questions_addressed": {
-      "type": "array",
-      "items": { "type": "integer", "minimum": 1, "maximum": 6 }
-    },
     "items": {
       "description": "List of verbatim sentences or short narratives to be clustered later.",
       "type": "array",
@@ -47,16 +46,12 @@ Return only a JSON object that validates the schema below. No extra commentary.
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["unit", "questions", "why_relevant"],
+        "required": ["unit", "why_relevant"],
         "properties": {
           "unit": { "type": "string", "enum": ["sentence", "narrative"] },
           "sentence_indices": {
             "type": "array",
             "items": { "type": "integer", "minimum": 0 }
-          },
-          "questions": {
-            "type": "array",
-            "items": { "type": "integer", "minimum": 1, "maximum": 6 }
           },
           "why_relevant": { "type": "string" }
         }
@@ -67,7 +62,7 @@ Return only a JSON object that validates the schema below. No extra commentary.
 }
 
 Notes: 
-If nothing is relevant: set "has_relevant": false, "questions_addressed": [], "items": [], "annotations": [], and explain in "overall_explanation".
+If nothing is relevant: set "has_relevant": false, "items": [], "annotations": [], and explain in "overall_explanation".
 Keep each items[i] short: a single sentence or a tight 1-2 sentence narrative (≤ 60 words).
 """
 
