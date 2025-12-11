@@ -130,57 +130,6 @@ If nothing is relevant: set "has_relevant": false, "questions_addressed": [], "i
 Keep each items[i] short: a single sentence or a tight 1-2 sentence narrative (≤ 60 words).
 """
 
-
-labelling_prompt = """
-You are an analytical assistant. You will read sentences of company responses to to allegations of misconduct on issues mainly related to human rights but also to the environment and business ethics
-
-Your task is to identify the overarching narrative(s) that connect all sentences in the cluster.
-
-***Instructions***:
-1. Carefully read all sentences in the cluster.
-2. Determine whether a single coherent overarching narrative connects the sentences.
-3. If a single narrative exists:
-   - Provide a concise label (max 3 words) summarizing the narrative under "overarching_label".
-   - Provide a 2-3 sentence description (max 150 words) under "overarching_narrative".
-   - Set "alternative_narratives" as an empty list.
-4. If no single coherent narrative exists:
-   - Leave "overarching_label" and "overarching_narrative" empty.
-   - Identify up to 3 distinct narratives. For each, provide a concise label (max 3 words) and a 2-3 sentence description (max 150 words).
-   - Store these under "alternative_narratives" as a list of objects with "label" and "description", ordered from most to least represented.
-5. If the summaries are too diverse or unrelated to form any coherent narratives:
-   - overarching_label: "misc"
-   - overarching_narrative: "misc"
-   - alternative_narratives: []
-6. Do not infer facts or details beyond what is present in the summaries.
-7. Return strictly valid JSON only using the key "overarching_narratives". Do not include explanations or text outside the JSON.
-
-***Output format***:
-{{
-  "cluster": "cluster_{{cluster_id}}",
-  "overarching_label": "up to 3 words",
-  "overarching_narrative": "up to 150 words",
-  "alternative_narratives": [
-    {{"label": "up to 3 words", "description": "up to 150 words"}},
-    {{"label": "up to 3 words", "description": "up to 150 words"}},
-    {{"label": "up to 3 words", "description": "up to 150 words"}}
-  ]
-}}
-
-"""
-
-
-labelling_prompt2 = '''
-You are an analytical assistant. You will read sentences of company responses to allegations of misconduct on issues mainly related to human rights but also to the environment and business ethics.
-Your task is to identify the overarching narrative(s) that connect all sentences in the cluster.
-Return concise JSON only. For each cluster:\n"
-    "- a short label (≤6 words),\n"
-    "- a one-sentence rationale,\n"
-    "- relevant RQs ⟨1..6⟩ from:\n"
-    "  1) role of relational contracts; 2) uncertainty types; 3) how managers deal with uncertainty;\n"
-    "  4) how expectations are communicated/negotiated; 5) assurances; 6) non-compliance & sanctions.\n"
-Be precise and avoid overclaiming.
-'''
-
 labelling_prompt3 = '''
 You are an analytical assistant. You will read sentences of company responses to allegations of misconduct on issues mainly related to human rights but also to the environment and business ethics.
 The sentences refer to relational contracting issues in the supply chain that might have caused or contributed to the violation.
